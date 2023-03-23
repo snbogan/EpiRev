@@ -1,0 +1,125 @@
+---
+title: "EpiRev_Figures"
+output: html_notebook
+---
+
+This R markdown contains quantitative figures from Bogan & Yi, a review on epigenetic regulation of phenotypic plasticity across abiotic environments.
+
+```{r}
+
+# Set working directory
+knitr::opts_knit$set(
+  root.dir = '~/Documents/GitHub/EpiRev/'
+  )
+
+# load dependencies
+library(tidyverse)
+library(Rmisc)
+
+```
+
+Figure 2 - Effect strengths of environmental diff meth on expression in vertebrates, vertebrates, and plants
+
+```{r}
+
+# Create df of vertebrate, invertebrate, and plant overlaps in DM and DE genes
+overlap_df <- data.frame(
+  Study = c("Saban_etal_2020","Johnson_etal_2021", 
+            "DowneyWall_etal_2020", "Strader_etal_2020",
+            "Arsenault_etal_2018","Dixon_Matz_2022",
+            "Dixon_Matz_2022","Dixon_Matz_2022",
+            "Dixon_Matz_2022","Dixon_Matz_2022",
+            "Dixon_Matz_2022","Dixon_Matz_2022",
+            "Dixon_Matz_2022","Li_etal_2020",
+            "Rajkumar_etal_2020a","Rajkumar_etal_2020b",
+            "Sun_etal_2021a", "Sun_etal_2021b",
+            "Zhao_etal_2021", "Anastasiadi_etal_2021",
+            "Jones_Griffit_2022","Skjærven_etal_2018",
+            "Rohr_etal_2021", "Lindner_etal_2021", 
+            "Miryeganeh_etal_2021"),
+  Prop      = c((48/14572),(16/730),
+                (.0199999), (22/684),
+                (12/212),(0.0001),
+                (0.0002),(0.0003),
+                (0.0002),(0),
+                (0.0001),(0.0001),
+                (0.0001),(3423/18580),
+                (1254/2910),(487/2153),
+                (86/4259), (31/5703),
+                (347/6192),(6/1796),
+                (20/1959),(12/2869),
+                (59/1582),(4/223),
+                (2924/47709)),
+  DM_loci = c(14572,730,
+              128,684,
+              212,NA,
+              NA,NA,
+              NA,NA,
+              NA,NA,
+              NA,18580,
+              2910,2153,
+              4259, 5703,
+              6192,1796,
+              1959,2869,
+              1582,223,
+              47709),
+  DE_loci = c(710,4525,
+              0,1811,
+              1337,NA,
+              NA,NA,
+              NA,NA,
+              NA,NA,
+              NA,16010,
+              11966,4862,
+              682,146,
+              2759,223,
+              719,686,
+              443,NA,
+              7709),
+  Group = c("Plants","Invertebrates",
+            "Invertebrates","Invertebrates",
+            "Invertebrates","Invertebrates",
+            "Invertebrates","Invertebrates",
+            "Invertebrates","Invertebrates",
+            "Invertebrates","Invertebrates",
+            "Invertebrates", "Plants",
+            "Plants", "Plants",
+            "Plants", "Plants",
+            "Plants", "Vertebrates (non-mammal)",
+            "Vertebrates (non-mammal)", "Vertebrates (non-mammal)",
+            "Vertebrates (non-mammal)","Vertebrates (non-mammal)",
+            "Plants"))
+
+# Calculate group means
+overlap_sum <- summarySE(measurevar = "Prop",
+                         groupvars = "Group",
+                         data = overlap_df)
+
+# Order groups
+overlap_df$Group = factor(
+  overlap_df$Group, 
+  levels=c('Vertebrates (non-mammal)','Invertebrates','Plants'))
+
+# Plot in GE variance explained by meth
+ggplot(data = overlap_df,
+       aes(x = Prop, y = Group)) +
+  geom_vline(xintercept = 0, lty = 2, color = "gray", size = 1) +
+  geom_jitter(height = 0.1, width = 0, size = 2.5, alpha = 0.5, color = "white") +
+  geom_point(data = overlap_sum, size = 4, color = "white") +
+  geom_errorbar(data = overlap_sum, 
+                aes(xmin = Prop - ci, xmax = Prop + ci), 
+                width = 0, size = 1, color = "white") +
+  #theme_classic(base_size = 15) +
+  labs(x = "Proportion DM associated with DE") +
+  theme_minimal(base_size = 15) +
+  theme(text = element_text(color = "white"),
+        axis.text = element_text(color = "white"),
+        axis.line = element_line(color = "white"),
+        axis.ticks = element_line(color = "white"),
+        plot.background = element_rect(fill = "gray20", color = "gray20"),
+        panel.grid = element_blank())
+
+```
+
+
+
