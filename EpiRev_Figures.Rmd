@@ -35,7 +35,7 @@ overlap_df <- data.frame(
             "Sun_etal_2021a", "Sun_etal_2021b",
             "Zhao_etal_2021", "Anastasiadi_etal_2021",
             "Jones_Griffit_2022","Skjærven_etal_2018",
-            "Rohr_etal_2021", "Lindner_etal_2021", 
+            "Ruhr_etal_2021", "Lindner_etal_2021", 
             "Miryeganeh_etal_2021"),
   Prop      = c((48/14572),(16/730),
                 (.0199999), (22/684),
@@ -103,20 +103,20 @@ overlap_df$Group = factor(
 # Plot in GE variance explained by meth
 ggplot(data = overlap_df,
        aes(x = Prop, y = Group)) +
-  geom_vline(xintercept = 0, lty = 2, color = "gray", size = 1) +
-  geom_jitter(height = 0.1, width = 0, size = 2.5, alpha = 0.5, color = "white") +
-  geom_point(data = overlap_sum, size = 4, color = "white") +
+  geom_vline(xintercept = 0, lty = 2, color = "gray50", size = 1) +
+  geom_jitter(height = 0.1, width = 0, size = 2.5, alpha = 0.75, color = "gray50") +
+  geom_point(data = overlap_sum, size = 4, color = "black") +
   geom_errorbar(data = overlap_sum, 
                 aes(xmin = Prop - ci, xmax = Prop + ci), 
-                width = 0, size = 1, color = "white") +
+                width = 0, size = 1, color = "black") +
   #theme_classic(base_size = 15) +
-  labs(x = "Proportion DM associated with DE") +
+  labs(x = "Differential expression ~ differential methylation") +
   theme_minimal(base_size = 15) +
-  theme(text = element_text(color = "white"),
-        axis.text = element_text(color = "white"),
-        axis.line = element_line(color = "white"),
-        axis.ticks = element_line(color = "white"),
-        plot.background = element_rect(fill = "gray20", color = "gray20"),
+  theme(text = element_text(color = "black"),
+        axis.text = element_text(color = "black"),
+        axis.line = element_line(color = "black"),
+        axis.ticks = element_line(color = "black"),
+        plot.background = element_rect(fill = "white", color = "white"),
         panel.grid = element_blank())
 
 ```
